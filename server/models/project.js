@@ -18,28 +18,13 @@ const ProjectSchema = new mongoose.Schema({
     type: Number,
     requried: true
   },
-  // type: {
-  //   type: String,
-  //   required: true
-  // },
-  // timePosted: {
-  //   type: String,
-  //   default: null
-  // },
-  // requirements: {
-  //   type: String,
-  //   required: true,
-  //   minlength: 1,
-  //   trim: true
-  // },
-  // contactInfo: {
-  //   type: String,
-  //   required: true,
-  // },
-  // _creator: {
-  //   type: mongoose.Schema.Types.ObjectId,
-  //   required: true
-  // }
+  datePosted: {
+    type: Number,
+  },
+  _creator: {
+    type: mongoose.Schema.Types.ObjectId,
+    required: true
+  }
 });
 
 const Project = mongoose.model('Project', ProjectSchema);

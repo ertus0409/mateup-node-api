@@ -27,7 +27,9 @@ app.post('/projects', authenticate, (req, res) => {
   var project = new Project({
     title: req.body.title,
     description: req.body.description,
-    postDuration: req.body.postDuration
+    postDuration: req.body.postDuration,
+    datePosted: new Date().getTime();
+    _creator: req.user._id
   });
 
   project.save().then((doc) => {
@@ -67,11 +69,46 @@ app.get('/projects/:id', authenticate, (req, res) => {
 });
 
 //DELETE /projects/:id
-
+app.delete('/projects/:id', authenticate, (req, res) => {
+  var id = req.params.id;
+  if (ObjectID.isValid(id)) {
+    Project.findOneAndRemove({
+    _id: id,
+    _creator: req.user._id
+  }).then((project) => {
+      if (!project) {
+        return res.status(404).send('No Project matching with the id')
+      }
+      return res.status(200).send(project);
+    }).catch((e) => {
+      res.status(400).send();
+    });
+  } else {
+    return res.status(404).send('Please use a valid id');
+  }
+});
 
 
 //PATCH /projects/:id
+app.patch('/projects/:id', authenticate, (req, res) => {
+  var usr = req.user
+  var id = req.params.id
+  var body = _.pick(req.body, ['title', 'completed']);
 
+  if (!ObjectID.isValid(id)) {
+    return res.status(404).send();
+  }
+
+  Project.findOneAndUpdate({_id: id, _creator: usr._id}, {$set: body}, {new: true}).then((project) => {
+    if (!project) {
+      return res.status(404).send();
+    }
+
+    res.send({project});
+  }).catch((e) => {
+    res.status(400).send();
+  });
+});
 
 
 //USER ROUTES ----------------------------------------
@@ -93,29 +130,30 @@ app.get('/users/me', authenticate, (req, res) => {
   res.send(req.user)
 });
 
-//GET /users/me/:token (sends the user credentials)
+//GET /users/login
+app.post('/users/login', (req, res) => {
+  var body = _.pick(req.body, ['email', 'password']);
+
+  User.findByCredentials(body.email, body.password).then((user) => {
+    user.generateAuthToken().then((token) => {
+      res.header('x-auth', token).send(user);
+    });
+  }).catch((e) => {
+    res.status(401).send()
+  });
+})
 
 
-//POST /users/login  (generate auth token)
 
 
 //DELETE /users/me/tokens  (logout - delete auth token)
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+app.delete('/users/me/logout', authenticate, (req, res) => {
+  req.user.removeToken(req.token).then(() => {
+    res.status(200).send();
+  }, () => {
+    res.status(400).send();
+  });
+});
 
 
 

@@ -28,7 +28,7 @@ app.post('/projects', authenticate, (req, res) => {
     title: req.body.title,
     description: req.body.description,
     postDuration: req.body.postDuration,
-    datePosted: new Date().getTime();
+    datePosted: new Date().getTime(),
     _creator: req.user._id
   });
 

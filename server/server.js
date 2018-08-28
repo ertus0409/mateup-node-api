@@ -21,6 +21,14 @@ const port = process.env.PORT;
 app.use(bodyParser.json());
 
 
+//When server starts:
+app.on('listening', function () {
+  Project.find({}).then((projects) => {
+    console.log(projects);
+  }).catch((e) => console.log(e));
+});
+
+
 
 //POST /projects
 app.post('/projects', authenticate, (req, res) => {
@@ -44,7 +52,7 @@ app.post('/projects', authenticate, (req, res) => {
 
 
 //GET /projects
-app.get('/projects', authenticate, (req, res) => {
+app.get('/projects', (req, res) => {
   Project.find({}).then((projects) => {
     res.send({projects});
   }, (e) => {

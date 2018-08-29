@@ -36,7 +36,9 @@ app.post('/projects', authenticate, (req, res) => {
     title: req.body.title,
     description: req.body.description,
     postDuration: req.body.postDuration,
-    datePosted: new Date().getTime(),
+    _datePosted: new Date().getTime(),
+    contactInfo: req.body.contactInfo,
+    lookingFor: req.body.lookingFor,
     _creator: req.user._id
   });
 

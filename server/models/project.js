@@ -31,6 +31,11 @@ const ProjectSchema = new mongoose.Schema({
     required: true,
     minlength: 1,
   },
+  currentTeam: {
+    type: String,
+    required: true,
+    minlength: 1
+  },
   _creator: {
     type: mongoose.Schema.Types.ObjectId,
     required: true

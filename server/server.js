@@ -39,6 +39,7 @@ app.post('/projects', authenticate, (req, res) => {
     _datePosted: new Date().getTime(),
     contactInfo: req.body.contactInfo,
     lookingFor: req.body.lookingFor,
+    currentTeam: req.body.currentTeam,
     _creator: req.user._id
   });
 

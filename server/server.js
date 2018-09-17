@@ -63,11 +63,10 @@ app.get('/projects', (req, res) => {
   });
 });
 
-//GET /projects/me
+//GET /projects/myprojects
 app.get('/projects/myprojects/', authenticate, (req, res) => {
-  var usr = req.user;
-  Project.find({_creator: usr._id}).then((projects) => {
-    res.send(projects)
+  Project.find({_creator: req.user._id}).then((projects) => {
+    res.send({projects})
   }).catch((e) => res.status(400).send());
 });
 

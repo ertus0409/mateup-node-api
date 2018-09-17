@@ -126,7 +126,7 @@ app.patch('/projects/:id', authenticate, (req, res) => {
 
 //POST /users
 app.post('/users', (req, res) => {
-  var body = _.pick(req.body, ['email', 'password']);
+  var body = _.pick(req.body, ['email', 'password', 'bio']);
   var user = new User(body);
 
   user.save().then(() => {
@@ -153,6 +153,22 @@ app.post('/users/login', (req, res) => {
     res.status(401).send()
   });
 })
+
+
+//PATCH /users/me/bio
+app.patch('/users/me/bio', authenticate, (req, res) => {
+  var usr = req.user;
+  usr.bio = req.body.bio;
+  console.log(usr);
+  User.findOneAndUpdate({_id: usr._id}, {$set: usr}, {new: true}).then((user) => {
+    if(!user) {
+      return res.status(404).send();
+    }
+
+    res.status(200).send({user});
+  }).catch((e) => res.status(400).send());
+});
+
 
 
 

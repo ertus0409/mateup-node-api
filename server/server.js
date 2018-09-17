@@ -63,6 +63,14 @@ app.get('/projects', (req, res) => {
   });
 });
 
+//GET /projects/me
+app.get('/projects/myprojects/', authenticate, (req, res) => {
+  var usr = req.user;
+  Project.find({_creator: usr._id}).then((projects) => {
+    res.send(projects)
+  }).catch((e) => res.status(400).send());
+});
+
 
 //GET /projects/:id
 app.get('/projects/:id', authenticate, (req, res) => {
@@ -120,6 +128,8 @@ app.patch('/projects/:id', authenticate, (req, res) => {
     res.status(400).send();
   });
 });
+
+
 
 
 //USER ROUTES ----------------------------------------

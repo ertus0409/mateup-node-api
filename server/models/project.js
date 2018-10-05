@@ -10,7 +10,6 @@ const ProjectSchema = new mongoose.Schema({
   description: {
     type: String,
     required: true,
-    //Change minlength later on
     minglength: 10,
     trim: true
   },
@@ -26,15 +25,9 @@ const ProjectSchema = new mongoose.Schema({
     required: true,
     minlength: 1,
   },
-  lookingFor: {
+  category: {
     type: String,
-    required: true,
-    minlength: 1,
-  },
-  currentTeam: {
-    type: String,
-    required: true,
-    minlength: 1
+    required: true
   },
   _creator: {
     type: mongoose.Schema.Types.ObjectId,
